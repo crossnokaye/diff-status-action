@@ -48,12 +48,20 @@ export async function run(): Promise<void> {
       return;
     }
 
+    // For pull_request events, context.sha is the ephemeral merge commit;
+    // branch protection checks statuses on the PR head commit instead.
+    const sha = context.payload.pull_request?.head?.sha;
+    if (!sha) {
+      core.setFailed('Could not determine pull request head SHA');
+      return;
+    }
+
     // Update all status checks to success
     for (const status of statuses) {
       await octokit.rest.repos.createCommitStatus({
         owner,
         repo,
-        sha: context.sha,
+        sha,
         state: 'success',
         context: status,
         description: 'Changed files are exempt from this requirement'
