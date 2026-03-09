@@ -13,7 +13,14 @@ jest.mock('@actions/github', () => ({
     issue: {
       number: 123
     },
-    sha: 'test-sha'
+    sha: 'ephemeral-merge-commit-sha',
+    payload: {
+      pull_request: {
+        head: {
+          sha: 'pr-head-sha'
+        }
+      }
+    }
   },
   getOctokit: jest.fn()
 }));
@@ -35,7 +42,10 @@ describe('Diff Status Action', () => {
     (github.context as any).eventName = 'pull_request';
     (github.context as any).issue = { number: 123 };
     (github.context as any).repo = { owner: 'test-owner', repo: 'test-repo' };
-    (github.context as any).sha = 'test-sha';
+    (github.context as any).sha = 'ephemeral-merge-commit-sha';
+    (github.context as any).payload = {
+      pull_request: { head: { sha: 'pr-head-sha' } }
+    };
 
     // Setup mock inputs
     (core.getInput as jest.Mock).mockImplementation((name: string) => {
@@ -87,6 +97,27 @@ describe('Diff Status Action', () => {
     expect(core.setFailed).not.toHaveBeenCalled();
     expect(mockOctokit.rest.repos.createCommitStatus).toHaveBeenCalledTimes(2);
     expect(core.info).toHaveBeenCalledWith('Successfully updated all status checks');
+  });
+
+  it('should post status to the PR head SHA, not the ephemeral merge commit', async () => {
+    await run();
+
+    expect(mockOctokit.rest.repos.createCommitStatus).toHaveBeenCalledWith(
+      expect.objectContaining({ sha: 'pr-head-sha' })
+    );
+    // Ensure we never post to the merge commit SHA
+    expect(mockOctokit.rest.repos.createCommitStatus).not.toHaveBeenCalledWith(
+      expect.objectContaining({ sha: 'ephemeral-merge-commit-sha' })
+    );
+  });
+
+  it('should fail if pull request head SHA is missing from payload', async () => {
+    (github.context as any).payload = {};
+
+    await run();
+
+    expect(core.setFailed).toHaveBeenCalledWith('Could not determine pull request head SHA');
+    expect(mockOctokit.rest.repos.createCommitStatus).not.toHaveBeenCalled();
   });
 
   it('should exit successfully without updating statuses when files do not match glob patterns', async () => {

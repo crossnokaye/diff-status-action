@@ -33859,6 +33859,7 @@ const minimatch_1 = __importDefault(__nccwpck_require__(3772));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         var _a, e_1, _b, _c;
+        var _d, _e;
         try {
             const token = core.getInput('token', { required: true });
             const globs = core.getInput('globs', { required: true }).split('\n');
@@ -33879,13 +33880,13 @@ function run() {
             // Get the list of changed files (with pagination to handle >300 files)
             const files = [];
             try {
-                for (var _d = true, _e = __asyncValues(octokit.paginate.iterator(octokit.rest.pulls.listFiles, {
+                for (var _f = true, _g = __asyncValues(octokit.paginate.iterator(octokit.rest.pulls.listFiles, {
                     owner,
                     repo,
                     pull_number,
-                })), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
-                    _c = _f.value;
-                    _d = false;
+                })), _h; _h = yield _g.next(), _a = _h.done, !_a; _f = true) {
+                    _c = _h.value;
+                    _f = false;
                     const response = _c;
                     files.push(...response.data);
                 }
@@ -33893,7 +33894,7 @@ function run() {
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
+                    if (!_f && !_a && (_b = _g.return)) yield _b.call(_g);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -33903,12 +33904,19 @@ function run() {
                 core.info('Changed files are not exempt from required statuses');
                 return;
             }
+            // For pull_request events, context.sha is the ephemeral merge commit;
+            // branch protection checks statuses on the PR head commit instead.
+            const sha = (_e = (_d = context.payload.pull_request) === null || _d === void 0 ? void 0 : _d.head) === null || _e === void 0 ? void 0 : _e.sha;
+            if (!sha) {
+                core.setFailed('Could not determine pull request head SHA');
+                return;
+            }
             // Update all status checks to success
             for (const status of statuses) {
                 yield octokit.rest.repos.createCommitStatus({
                     owner,
                     repo,
-                    sha: context.sha,
+                    sha,
                     state: 'success',
                     context: status,
                     description: 'Changed files are exempt from this requirement'
