@@ -13,6 +13,9 @@ inputs:
   statuses:
     description: 'Newline-separated list of status check names to update'
     required: true
+outputs:
+  docs-only:
+    description: 'Whether all changed files match the glob patterns (true/false)'    
 runs:
   using: 'node20'
   main: 'dist/index.js'

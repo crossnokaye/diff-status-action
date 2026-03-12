@@ -29,6 +29,7 @@ jest.mock('@actions/github', () => ({
 jest.mock('@actions/core', () => ({
   getInput: jest.fn(),
   setFailed: jest.fn(),
+  setOutput: jest.fn(),
   info: jest.fn()
 }));
 
@@ -95,6 +96,7 @@ describe('Diff Status Action', () => {
     await run();
 
     expect(core.setFailed).not.toHaveBeenCalled();
+    expect(core.setOutput).toHaveBeenCalledWith('docs-only', 'true');
     expect(mockOctokit.rest.repos.createCommitStatus).toHaveBeenCalledTimes(2);
     expect(core.info).toHaveBeenCalledWith('Successfully updated all status checks');
   });
@@ -132,6 +134,7 @@ describe('Diff Status Action', () => {
 
     await run();
 
+    expect(core.setOutput).toHaveBeenCalledWith('docs-only', 'false');
     expect(core.setFailed).not.toHaveBeenCalled();
     expect(core.info).toHaveBeenCalledWith('Changed files are not exempt from required statuses');
     expect(mockOctokit.rest.repos.createCommitStatus).not.toHaveBeenCalled();
