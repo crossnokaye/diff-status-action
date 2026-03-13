@@ -43,7 +43,7 @@ export async function run(): Promise<void> {
       globs.some((glob: string) => minimatch(file.filename, glob))
     );
 
-    core.setOutput('docs-only', allFilesMatch.toString());
+    core.setOutput('all-match', allFilesMatch.toString());
 
     if (!allFilesMatch) {
       core.info('Changed files are not exempt from required statuses');

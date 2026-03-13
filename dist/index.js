@@ -33952,7 +33952,7 @@ function run() {
             }
             // Check if all files match at least one glob pattern
             const allFilesMatch = files.every((file) => globs.some((glob) => (0, minimatch_1.default)(file.filename, glob)));
-            core.setOutput('docs-only', allFilesMatch.toString());
+            core.setOutput('all-match', allFilesMatch.toString());
             if (!allFilesMatch) {
                 core.info('Changed files are not exempt from required statuses');
                 return;
