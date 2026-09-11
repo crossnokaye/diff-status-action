@@ -28,6 +28,9 @@ sets `INPUT_TOKEN` to that step's token output.
 existing TypeScript implementation retains its API, pagination, matching, and
 status-update behavior without exposing a public `token` input.
 
+The composite action maps its `all-match` output to the Node step's output, so
+callers retain the existing output contract.
+
 ## Validation
 
 Update the action metadata and README tests, retain unit coverage of the

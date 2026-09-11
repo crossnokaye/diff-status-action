@@ -19,6 +19,7 @@ inputs:
 outputs:
   all-match:
     description: 'Whether all changed files match the glob patterns (true/false)'
+    value: ${{ steps.update-exempted-statuses.outputs.all-match }}
 runs:
   using: 'composite'
   steps:
@@ -30,6 +31,7 @@ runs:
         private-key: ${{ inputs.private_key }}
         owner: ${{ github.repository_owner }}
     - name: Update exempted statuses
+      id: update-exempted-statuses
       shell: bash
       env:
         INPUT_TOKEN: ${{ steps.app-token.outputs.token }}

@@ -12,5 +12,6 @@ describe('action metadata', () => {
     expect(action).toContain('uses: actions/create-github-app-token@v1');
     expect(action).toContain('INPUT_TOKEN: ${{ steps.app-token.outputs.token }}');
     expect(action).toContain('node "${{ github.action_path }}/dist/index.js"');
+    expect(action).toContain('value: ${{ steps.update-exempted-statuses.outputs.all-match }}');
   });
 });

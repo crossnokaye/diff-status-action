@@ -28,6 +28,7 @@ expect(action).toContain("using: 'composite'");
 expect(action).toContain('uses: actions/create-github-app-token@v1');
 expect(action).toContain('INPUT_TOKEN: ${{ steps.app-token.outputs.token }}');
 expect(action).toContain('node "${{ github.action_path }}/dist/index.js"');
+expect(action).toContain('value: ${{ steps.update-exempted-statuses.outputs.all-match }}');
 ```
 
 **Step 2: Run the test to verify it fails**
@@ -54,6 +55,8 @@ Replace the public `token` input in `action.yml` with required `app_id` and `pri
 ```
 
 Keep `src/main.ts` unchanged: `core.getInput('token')` is an internal interface served by `INPUT_TOKEN`.
+Assign the Node step the `update-exempted-statuses` ID and map the composite
+action's `all-match` output to `steps.update-exempted-statuses.outputs.all-match`.
 
 **Step 4: Run the test to verify it passes**
 
