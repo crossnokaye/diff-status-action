@@ -22,8 +22,8 @@ jobs:
           statuses: |
             deploy-production
             deploy-staging
-          app_id: ${{ secrets.DEPLOYMENT_VERIFIER_APP_ID }}
-          private_key: ${{ secrets.DEPLOYMENT_VERIFIER_PRIVATE_KEY }}
+          app_id: ${{ secrets.VERSION_CONTROLLER_APP_ID }}
+          private_key: ${{ secrets.VERSION_CONTROLLER_PRIVATE_KEY }}
 ```
 
 ## Inputs

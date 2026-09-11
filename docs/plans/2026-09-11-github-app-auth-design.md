@@ -13,7 +13,7 @@ Version 2 is a breaking change. It removes the `token` input and requires:
 - `private_key`: GitHub App private key.
 
 The README will demonstrate caller-managed secrets named
-`DEPLOYMENT_VERIFIER_APP_ID` and `DEPLOYMENT_VERIFIER_PRIVATE_KEY`. These are
+`VERSION_CONTROLLER_APP_ID` and `VERSION_CONTROLLER_PRIVATE_KEY`. These are
 example names; callers create and manage their own secrets.
 
 ## Authentication Flow

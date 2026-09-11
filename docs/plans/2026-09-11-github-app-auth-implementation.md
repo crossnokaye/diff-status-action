@@ -81,8 +81,8 @@ git commit -m "feat!: authenticate with GitHub App"
 Replace the `token` example with:
 
 ```yaml
-app_id: ${{ secrets.DEPLOYMENT_VERIFIER_APP_ID }}
-private_key: ${{ secrets.DEPLOYMENT_VERIFIER_PRIVATE_KEY }}
+app_id: ${{ secrets.VERSION_CONTROLLER_APP_ID }}
+private_key: ${{ secrets.VERSION_CONTROLLER_PRIVATE_KEY }}
 ```
 
 **Step 2: Update input documentation**
@@ -91,7 +91,7 @@ Document required `app_id` and `private_key` inputs. State that the shown secret
 
 **Step 3: Verify documentation references**
 
-Run: `rg -n "token|app_id|private_key|DEPLOYMENT_VERIFIER" README.md action.yml`
+Run: `rg -n "token|app_id|private_key|VERSION_CONTROLLER" README.md action.yml`
 
 Expected: no public `token` input remains; the example App secret names and inputs are present.
 
