@@ -4,8 +4,11 @@ description: |
   Use this action to exempt minor updates (e.g. documentation, tests) from deployment checks.
 author: 'xeger'
 inputs:
-  token:
-    description: 'GitHub token for API access'
+  app_id:
+    description: 'GitHub App ID used to authenticate API requests'
+    required: true
+  private_key:
+    description: 'GitHub App private key used to authenticate API requests'
     required: true
   globs:
     description: 'Newline-separated list of glob patterns to match against changed files'
@@ -15,10 +18,22 @@ inputs:
     required: true
 outputs:
   all-match:
-    description: 'Whether all changed files match the glob patterns (true/false)'    
+    description: 'Whether all changed files match the glob patterns (true/false)'
 runs:
-  using: 'node20'
-  main: 'dist/index.js'
+  using: 'composite'
+  steps:
+    - name: Generate GitHub App token
+      id: app-token
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ inputs.app_id }}
+        private-key: ${{ inputs.private_key }}
+        owner: ${{ github.repository_owner }}
+    - name: Update exempted statuses
+      shell: bash
+      env:
+        INPUT_TOKEN: ${{ steps.app-token.outputs.token }}
+      run: node "${{ github.action_path }}/dist/index.js"
 branding:
   icon: 'check-circle'
   color: 'green'
