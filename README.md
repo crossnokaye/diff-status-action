@@ -14,7 +14,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: xeger/diff-status-action@v1
+      - uses: xeger/diff-status-action@v2
         with:
           globs: |
             **/*.md
@@ -22,14 +22,21 @@ jobs:
           statuses: |
             deploy-production
             deploy-staging
-          token: ${{ secrets.GITHUB_TOKEN }}
+          app_id: ${{ secrets.DEPLOYMENT_VERIFIER_APP_ID }}
+          private_key: ${{ secrets.DEPLOYMENT_VERIFIER_PRIVATE_KEY }}
 ```
 
 ## Inputs
 
-### `token`
+### `app_id`
 
-**Required** The GitHub token used to authenticate API requests. Typically `${{ secrets.GITHUB_TOKEN }}`.
+**Required** The GitHub App ID used to authenticate API requests.
+
+### `private_key`
+
+**Required** The GitHub App private key used to authenticate API requests.
+
+The secret names in the example are illustrative. Callers are responsible for creating and managing their own GitHub App secrets.
 
 ### `globs`
 
