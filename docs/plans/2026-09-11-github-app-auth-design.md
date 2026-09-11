@@ -22,10 +22,12 @@ The action will change from a JavaScript action to a composite action. Its
 first step uses `actions/create-github-app-token@v1` with `app_id`,
 `private_key`, and the current repository owner to mint a short-lived
 installation token. Its second step runs the existing bundled JavaScript and
-sets `INPUT_TOKEN` to that step's token output.
+sets `INPUT_TOKEN`, `INPUT_GLOBS`, and `INPUT_STATUSES` from the token output
+and caller inputs.
 
-`@actions/core` resolves `core.getInput('token')` from `INPUT_TOKEN`, so the
-existing TypeScript implementation retains its API, pagination, matching, and
+`@actions/core` resolves `core.getInput()` values from the corresponding
+`INPUT_*` environment variables. Explicitly setting those variables lets the
+existing TypeScript implementation retain its token, pagination, matching, and
 status-update behavior without exposing a public `token` input.
 
 The composite action maps its `all-match` output to the Node step's output, so

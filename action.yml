@@ -35,6 +35,8 @@ runs:
       shell: bash
       env:
         INPUT_TOKEN: ${{ steps.app-token.outputs.token }}
+        INPUT_GLOBS: ${{ inputs.globs }}
+        INPUT_STATUSES: ${{ inputs.statuses }}
       run: node "${{ github.action_path }}/dist/index.js"
 branding:
   icon: 'check-circle'
