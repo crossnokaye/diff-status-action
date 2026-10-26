@@ -5,7 +5,10 @@ describe('action metadata', () => {
   it('authenticates with a caller-supplied GitHub App', () => {
     const action = readFileSync(resolve(process.cwd(), 'action.yml'), 'utf8');
 
+    expect(action).toContain('  client_id:');
     expect(action).toContain('  app_id:');
+    expect(action).toContain('client-id: ${{ inputs.client_id || inputs.app_id }}');
+    expect(action).not.toContain('app-id:');
     expect(action).toContain('  private_key:');
     expect(action).not.toContain('  token:');
     expect(action).toContain("using: 'composite'");
