@@ -9,7 +9,7 @@ describe('action metadata', () => {
     expect(action).toContain('  private_key:');
     expect(action).not.toContain('  token:');
     expect(action).toContain("using: 'composite'");
-    expect(action).toContain('uses: actions/create-github-app-token@v1');
+    expect(action).toContain('uses: actions/create-github-app-token@v3');
     expect(action).toContain('INPUT_TOKEN: ${{ steps.app-token.outputs.token }}');
     expect(action).toContain('INPUT_GLOBS: ${{ inputs.globs }}');
     expect(action).toContain('INPUT_STATUSES: ${{ inputs.statuses }}');

@@ -25,7 +25,7 @@ runs:
   steps:
     - name: Generate GitHub App token
       id: app-token
-      uses: actions/create-github-app-token@v1
+      uses: actions/create-github-app-token@v3
       with:
         app-id: ${{ inputs.app_id }}
         private-key: ${{ inputs.private_key }}
