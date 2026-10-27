@@ -4,9 +4,12 @@ description: |
   Use this action to exempt minor updates (e.g. documentation, tests) from deployment checks.
 author: 'xeger'
 inputs:
+  client_id:
+    description: 'GitHub App Client ID used to authenticate API requests (required unless app_id is set)'
+    required: false
   app_id:
-    description: 'GitHub App ID used to authenticate API requests'
-    required: true
+    description: 'Deprecated: use client_id. GitHub App ID used to authenticate API requests'
+    required: false
   private_key:
     description: 'GitHub App private key used to authenticate API requests'
     required: true
@@ -25,9 +28,9 @@ runs:
   steps:
     - name: Generate GitHub App token
       id: app-token
-      uses: actions/create-github-app-token@v1
+      uses: actions/create-github-app-token@v3
       with:
-        app-id: ${{ inputs.app_id }}
+        client-id: ${{ inputs.client_id || inputs.app_id }}
         private-key: ${{ inputs.private_key }}
         owner: ${{ github.repository_owner }}
     - name: Update exempted statuses

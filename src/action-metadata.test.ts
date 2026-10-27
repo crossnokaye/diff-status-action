@@ -5,11 +5,14 @@ describe('action metadata', () => {
   it('authenticates with a caller-supplied GitHub App', () => {
     const action = readFileSync(resolve(process.cwd(), 'action.yml'), 'utf8');
 
+    expect(action).toContain('  client_id:');
     expect(action).toContain('  app_id:');
+    expect(action).toContain('client-id: ${{ inputs.client_id || inputs.app_id }}');
+    expect(action).not.toContain('app-id:');
     expect(action).toContain('  private_key:');
     expect(action).not.toContain('  token:');
     expect(action).toContain("using: 'composite'");
-    expect(action).toContain('uses: actions/create-github-app-token@v1');
+    expect(action).toContain('uses: actions/create-github-app-token@v3');
     expect(action).toContain('INPUT_TOKEN: ${{ steps.app-token.outputs.token }}');
     expect(action).toContain('INPUT_GLOBS: ${{ inputs.globs }}');
     expect(action).toContain('INPUT_STATUSES: ${{ inputs.statuses }}');

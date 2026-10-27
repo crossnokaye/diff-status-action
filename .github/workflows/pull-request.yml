@@ -12,7 +12,8 @@ jobs:
       - name: Diff Status Action
         uses: ./
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          app_id: "292477"
+          private_key: ${{ secrets.VERSION_CONTROLLER_PRIVATE_KEY }}
           globs: |
             **/*.md
           statuses: |

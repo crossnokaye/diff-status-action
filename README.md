@@ -22,15 +22,19 @@ jobs:
           statuses: |
             deploy-production
             deploy-staging
-          app_id: ${{ secrets.VERSION_CONTROLLER_APP_ID }}
+          client_id: ${{ vars.VERSION_CONTROLLER_CLIENT_ID }}
           private_key: ${{ secrets.VERSION_CONTROLLER_PRIVATE_KEY }}
 ```
 
 ## Inputs
 
+### `client_id`
+
+The GitHub App Client ID used to authenticate API requests. Required unless `app_id` is set; takes precedence if both are set.
+
 ### `app_id`
 
-**Required** The GitHub App ID used to authenticate API requests.
+**Deprecated:** use `client_id`. The GitHub App ID used to authenticate API requests. Still supported so callers can migrate gradually.
 
 ### `private_key`
 
