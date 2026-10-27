@@ -12,7 +12,7 @@ jobs:
       - name: Diff Status Action
         uses: ./
         with:
-          app_id: ${{ vars.VERSION_CONTROLLER_APP_ID }}
+          app_id: "292477"
           private_key: ${{ secrets.VERSION_CONTROLLER_PRIVATE_KEY }}
           globs: |
             **/*.md
